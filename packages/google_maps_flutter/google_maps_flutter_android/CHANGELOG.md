@@ -1,3 +1,7 @@
+## 2.18.11
+
+* Batches clustered marker add/remove operations to avoid redundant re-rendering.
+
 ## 2.18.10
 
 * Bump com.google.maps.android:android-maps-utils from 3.19.1 to 3.20.1.
