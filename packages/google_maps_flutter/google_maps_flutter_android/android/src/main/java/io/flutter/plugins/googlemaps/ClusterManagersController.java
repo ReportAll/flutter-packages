@@ -38,6 +38,10 @@ class ClusterManagersController
   private ClusterManager.OnClusterItemClickListener<MarkerBuilder> clusterItemClickListener;
 
   @Nullable
+  private ClusterManager.OnClusterItemInfoWindowClickListener<MarkerBuilder>
+      clusterItemInfoWindowClickListener;
+
+  @Nullable
   private ClusterManagersController.OnClusterItemRendered<MarkerBuilder>
       clusterItemRenderedListener;
 
@@ -58,6 +62,12 @@ class ClusterManagersController
     initListenersForClusterManagers();
   }
 
+  void setClusterItemInfoWindowClickListener(
+      @Nullable ClusterManager.OnClusterItemInfoWindowClickListener<MarkerBuilder> listener) {
+    clusterItemInfoWindowClickListener = listener;
+    initListenersForClusterManagers();
+  }
+
   void setClusterItemRenderedListener(
       @Nullable ClusterManagersController.OnClusterItemRendered<MarkerBuilder> listener) {
     clusterItemRenderedListener = listener;
@@ -66,16 +76,21 @@ class ClusterManagersController
   private void initListenersForClusterManagers() {
     for (Map.Entry<String, ClusterManager<MarkerBuilder>> entry :
         clusterManagerIdToManager.entrySet()) {
-      initListenersForClusterManager(entry.getValue(), this, clusterItemClickListener);
+      initListenersForClusterManager(
+          entry.getValue(), this, clusterItemClickListener, clusterItemInfoWindowClickListener);
     }
   }
 
   private void initListenersForClusterManager(
       ClusterManager<MarkerBuilder> clusterManager,
       @Nullable ClusterManager.OnClusterClickListener<MarkerBuilder> clusterClickListener,
-      @Nullable ClusterManager.OnClusterItemClickListener<MarkerBuilder> clusterItemClickListener) {
+      @Nullable ClusterManager.OnClusterItemClickListener<MarkerBuilder> clusterItemClickListener,
+      @Nullable
+          ClusterManager.OnClusterItemInfoWindowClickListener<MarkerBuilder>
+              clusterItemInfoWindowClickListener) {
     clusterManager.setOnClusterClickListener(clusterClickListener);
     clusterManager.setOnClusterItemClickListener(clusterItemClickListener);
+    clusterManager.setOnClusterItemInfoWindowClickListener(clusterItemInfoWindowClickListener);
   }
 
   /** Adds new ClusterManagers to the controller. */
@@ -92,7 +107,8 @@ class ClusterManagersController
     ClusterRenderer<MarkerBuilder> clusterRenderer =
         new ClusterRenderer<MarkerBuilder>(context, googleMap, clusterManager, this);
     clusterManager.setRenderer(clusterRenderer);
-    initListenersForClusterManager(clusterManager, this, clusterItemClickListener);
+    initListenersForClusterManager(
+        clusterManager, this, clusterItemClickListener, clusterItemInfoWindowClickListener);
     clusterManagerIdToManager.put(clusterManagerId, clusterManager);
   }
 
@@ -115,7 +131,7 @@ class ClusterManagersController
     if (clusterManager == null) {
       return;
     }
-    initListenersForClusterManager(clusterManager, null, null);
+    initListenersForClusterManager(clusterManager, null, null, null);
     clusterManager.clearItems();
     clusterManager.cluster();
   }
