@@ -1459,7 +1459,19 @@ PlatformMapConfiguration _platformMapConfigurationFromMapConfiguration(
     ),
     mapId: config.mapId,
     style: config.style,
+    colorScheme: _platformMapColorSchemeFromMapColorScheme(config.colorScheme),
   );
+}
+
+PlatformMapColorScheme? _platformMapColorSchemeFromMapColorScheme(
+  MapColorScheme? colorScheme,
+) {
+  return switch (colorScheme) {
+    MapColorScheme.light => PlatformMapColorScheme.light,
+    MapColorScheme.dark => PlatformMapColorScheme.dark,
+    MapColorScheme.followSystem => PlatformMapColorScheme.followSystem,
+    null => null,
+  };
 }
 
 // For supporting the deprecated updateMapOptions API.

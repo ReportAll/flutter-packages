@@ -209,4 +209,11 @@ class GoogleMapBuilder implements GoogleMapOptionsSink {
   public void setMapStyle(@Nullable String style) {
     this.style = style;
   }
+
+  @Override
+  public void setMapColorScheme(@Nullable PlatformMapColorScheme colorScheme) {
+    if (colorScheme != null) {
+      options.mapColorScheme(Convert.toMapColorScheme(colorScheme));
+    }
+  }
 }

@@ -343,6 +343,7 @@ void main() {
       compassEnabled: true,
       mapType: MapType.terrain,
       cameraTargetBounds: cameraBounds,
+      colorScheme: MapColorScheme.dark,
     );
     await maps.updateMapConfiguration(config, mapId: mapId);
 
@@ -353,6 +354,7 @@ void main() {
     // Each set option should be present.
     expect(passedConfig.compassEnabled, true);
     expect(passedConfig.mapType, PlatformMapType.terrain);
+    expect(passedConfig.colorScheme, PlatformMapColorScheme.dark);
     expect(
       passedConfig.cameraTargetBounds?.bounds?.northeast.latitude,
       cameraBounds.bounds?.northeast.latitude,

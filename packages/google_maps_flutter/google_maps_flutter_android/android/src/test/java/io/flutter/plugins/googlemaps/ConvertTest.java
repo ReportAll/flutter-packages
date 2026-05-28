@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapColorScheme;
 import com.google.android.gms.maps.model.PinConfig;
 import com.google.maps.android.clustering.algo.StaticCluster;
 import com.google.maps.android.geometry.Point;
@@ -522,6 +523,24 @@ public class ConvertTest {
   }
 
   @Test
+  public void interpretMapConfiguration_handlesColorScheme() {
+    final PlatformMapConfiguration config =
+        getMinimalConfigurationBuilder().setColorScheme(PlatformMapColorScheme.DARK).build();
+    Convert.interpretMapConfiguration(config, optionsSink);
+    verify(optionsSink, times(1)).setMapColorScheme(PlatformMapColorScheme.DARK);
+  }
+
+  @Test
+  public void toMapColorScheme_convertsAllValues() {
+    Assert.assertEquals(
+        MapColorScheme.LIGHT, Convert.toMapColorScheme(PlatformMapColorScheme.LIGHT));
+    Assert.assertEquals(MapColorScheme.DARK, Convert.toMapColorScheme(PlatformMapColorScheme.DARK));
+    Assert.assertEquals(
+        MapColorScheme.FOLLOW_SYSTEM,
+        Convert.toMapColorScheme(PlatformMapColorScheme.FOLLOW_SYSTEM));
+  }
+
+  @Test
   public void interpretMapConfiguration_handlesUnboundedCameraTargetBounds() {
     final PlatformMapConfiguration config =
         getMinimalConfigurationBuilder()
@@ -859,6 +878,7 @@ public class ConvertTest {
     private @Nullable PlatformMarkerType markerType;
     private @Nullable String mapId;
     private @Nullable String style;
+    private @Nullable PlatformMapColorScheme colorScheme;
 
     public @NonNull PlatformMapConfigurationBuilder setCompassEnabled(@Nullable Boolean setterArg) {
       this.compassEnabled = setterArg;
@@ -982,6 +1002,12 @@ public class ConvertTest {
       return this;
     }
 
+    public @NonNull PlatformMapConfigurationBuilder setColorScheme(
+        @Nullable PlatformMapColorScheme setterArg) {
+      this.colorScheme = setterArg;
+      return this;
+    }
+
     public @NonNull PlatformMapConfiguration build() {
       return new PlatformMapConfiguration(
           compassEnabled,
@@ -1004,7 +1030,8 @@ public class ConvertTest {
           liteModeEnabled,
           Objects.requireNonNull(markerType),
           mapId,
-          style);
+          style,
+          colorScheme);
     }
   }
 }

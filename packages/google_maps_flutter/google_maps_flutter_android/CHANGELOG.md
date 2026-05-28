@@ -1,3 +1,9 @@
+## 2.20.0
+
+* Adds support for `colorScheme` to control the base map's light/dark
+  appearance, fixing the base map showing in light style while the app is in
+  dark mode.
+
 ## 2.19.10
 
 * Updates README to include setup information.

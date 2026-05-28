@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapColorScheme;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.PinConfig;
 import com.google.android.gms.maps.model.RoundCap;
@@ -377,6 +378,14 @@ class Convert {
     };
   }
 
+  static int toMapColorScheme(@NonNull PlatformMapColorScheme colorScheme) {
+    return switch (colorScheme) {
+      case LIGHT -> MapColorScheme.LIGHT;
+      case DARK -> MapColorScheme.DARK;
+      case FOLLOW_SYSTEM -> MapColorScheme.FOLLOW_SYSTEM;
+    };
+  }
+
   // For now, suppress the deprecation warning for LEGACY; in theory using it
   // no longer does anything, but since that's a server-side decision that could
   // potentially change. Once enough time has passed that there's no plausible
@@ -576,6 +585,10 @@ class Convert {
     final String style = config.getStyle();
     if (style != null) {
       sink.setMapStyle(style);
+    }
+    final PlatformMapColorScheme colorScheme = config.getColorScheme();
+    if (colorScheme != null) {
+      sink.setMapColorScheme(colorScheme);
     }
   }
 
